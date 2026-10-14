@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Trị Bài Viết | Cẩm Nang Xe Đạp</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <script is:inline>
+      try {
+        ['decap-cms-user', 'netlify-cms-user'].forEach(function (key) {
+          var raw = localStorage.getItem(key);
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (!parsed.token || parsed.token === 'undefined' || parsed.backendName === 'test-repo') {
+              localStorage.removeItem(key);
+            }
+          }
+        });
+      } catch (e) {
+        localStorage.removeItem('decap-cms-user');
+        localStorage.removeItem('netlify-cms-user');
+      }
+      window.CMS_MANUAL_INIT = true;
+    </script>
+
+    <script is:inline src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+
+    <script is:inline>
+      window.addEventListener('load', function () {
+        var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        window.CMS.init({
+          config: {
+            load_config_file: false,
+            backend: {
+              name: 'github',
+              repo: 'aa0933770487-hue/camnangxedap.com',
+              branch: 'main',
+              base_url: window.location.origin,
+              auth_endpoint: 'api/auth'
+            },
+            local_backend: isLocal,
+            media_folder: 'public/images',
+            public_folder: '/images',
+            collections: [
+              {
+                name: 'posts',
+                label: 'Bài Viết Cẩm Nang',
+                folder: 'src/content/posts',
+                create: true,
+                slug: '{{slug}}',
+                fields: [
+                  { label: 'Tiêu Đề', name: 'title', widget: 'string' },
+                  { label: 'Ảnh Đại Diện (Thumbnail)', name: 'image', widget: 'image', required: false },
+                  {
+                    label: 'Bộ Ảnh Đa Góc Độ (3-4 góc chụp chi tiết)',
+                    name: 'gallery',
+                    widget: 'list',
+                    required: false,
+                    fields: [
+                      { label: 'Chọn Ảnh Góc Chụp', name: 'src', widget: 'image' },
+                      { label: 'Tên Góc Chụp (VD: Góc ngang, Bộ xích líp, Ghi đông)', name: 'label', widget: 'string' }
+                    ]
+                  },
+                  { label: 'Mô Tả Ngắn (SEO)', name: 'description', widget: 'text' },
+                  { label: 'Ngày Đăng', name: 'pubDate', widget: 'datetime', format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false },
+                  {
+                    label: 'Chuyên Mục',
+                    name: 'category',
+                    widget: 'select',
+                    options: [
+                      'Kinh nghiệm chọn xe',
+                      'Bảo dưỡng & Sửa chữa',
+                      'Phụ kiện & Đồ chơi',
+                      'Cung đường & Trải nghiệm'
+                    ]
+                  },
+                  { label: 'Tác Giả', name: 'author', widget: 'string', default: 'Ban Biên Tập Cẩm Nang Xe Đạp' },
+                  { label: 'Bài Nổi Bật', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Thời Gian Đọc', name: 'readTime', widget: 'string', default: '5 phút' },
+                  { label: 'Nội Dung', name: 'body', widget: 'markdown' }
+                ]
+              }
+            ]
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
