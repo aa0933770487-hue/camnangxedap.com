@@ -1,14 +1,17 @@
-﻿backend:
+backend:
   name: github
   repo: aa0933770487-hue/camnangxedap.com
   branch: main
   base_url: https://camnangxedap.pages.dev
   auth_endpoint: api/auth
 
+local_backend: true
+
 media_folder: "public/images"
 public_folder: "/images"
 
 collections:
+  # Mục 1: Quản lý bài viết cẩm nang
   - name: "posts"
     label: "Bài Viết Cẩm Nang"
     folder: "src/content/posts"
@@ -25,7 +28,7 @@ collections:
         required: false
         fields:
           - { label: "Chọn Ảnh Góc Chụp", name: "src", widget: "image" }
-          - { label: "Tên Góc Chụp (VD: Góc ngang, Bộ xích líp, Ghi đông)", name: "label", widget: "string" }
+          - { label: "Tên Góc Chụp", name: "label", widget: "string" }
       - { label: "Mô Tả Ngắn (SEO)", name: "description", widget: "text" }
       - { label: "Ngày Đăng", name: "pubDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - label: "Chuyên Mục"
@@ -40,3 +43,18 @@ collections:
       - { label: "Bài Nổi Bật", name: "featured", widget: "boolean", default: false }
       - { label: "Thời Gian Đọc", name: "readTime", widget: "string", default: "5 phút" }
       - { label: "Nội Dung", name: "body", widget: "markdown" }
+
+  # Mục 2: Sửa trực tiếp chữ Banner & Link Đối tác trên Web
+  - name: "settings"
+    label: "Cài Đặt Giao Diện & Trang Chủ"
+    files:
+      - label: "Nội Dung Banner & Khung Đối Tác"
+        name: "site_settings"
+        file: "src/content/settings/site.json"
+        fields:
+          - { label: "Tiêu Đề Lớn Banner", name: "heroTitle", widget: "string" }
+          - { label: "Mô Tả Dưới Banner", name: "heroSubtitle", widget: "text" }
+          - { label: "Tiêu Đề Khung Đối Tác", name: "partnerTitle", widget: "string" }
+          - { label: "Mô Tả Khung Đối Tác", name: "partnerDesc", widget: "text" }
+          - { label: "Link Web Cửa Hàng Đối Tác", name: "partnerLink", widget: "string" }
+          - { label: "Email Liên Hệ (Chân trang)", name: "contactEmail", widget: "string" }
