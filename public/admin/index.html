@@ -6,10 +6,61 @@
     <title>Quản Trị Bài Viết | Cẩm Nang Xe Đạp</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <style>
+      /* Màn hình chờ phong cách công nghệ cao */
+      #custom-loading-screen {
+        position: fixed;
+        inset: 0;
+        background: #07172c;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #ffffff;
+        transition: opacity 0.4s ease-out;
+      }
+      .loading-spinner {
+        width: 64px;
+        height: 64px;
+        border: 4px solid rgba(6, 182, 212, 0.2);
+        border-top: 4px solid #06b6d4;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .loading-title {
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: #f8fafc;
+      }
+      .loading-subtitle {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #94a3b8;
+      }
+    </style>
   </head>
   <body>
+    <!-- Giao diện màn hình chờ tùy chỉnh -->
+    <div id="custom-loading-screen">
+      <div class="loading-spinner">🚲</div>
+      <div class="loading-title">CẨM NANG XE ĐẠP • TRUNG TÂM QUẢN TRỊ</div>
+      <div class="loading-subtitle">Đang nạp hệ thống và kết nối dữ liệu bảo mật...</div>
+    </div>
+
     <script>
-      // Tự động xóa token lỗi kẹt trong trình duyệt
+      // Xóa token lỗi kẹt trong trình duyệt
       try {
         ['decap-cms-user', 'netlify-cms-user'].forEach(function(k) {
           var v = localStorage.getItem(k);
@@ -21,7 +72,7 @@
         localStorage.clear();
       }
 
-      // Tự động chèn nút mở Dashboard thống kê vào menu bên trái của Decap CMS
+      // Tự động thêm nút chuyển sang Thống Kê Dashboard vào menu trái khi CMS load xong
       window.addEventListener('DOMContentLoaded', function() {
         var checkInterval = setInterval(function() {
           var sidebarList = document.querySelector('aside ul') || document.querySelector('.nc-menu-list') || document.querySelector('ul[class*="nc-netlify-ui"]');
@@ -30,11 +81,22 @@
             li.style.cssText = 'margin-top: 16px; border-top: 1px solid #e2e8f0; padding-top: 16px;';
             li.innerHTML = '<a id="custom-dashboard-btn" href="/dashboard" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; color: #2563eb; font-weight: 700; font-size: 13px; text-decoration: none; border-radius: 8px; background: #eff6ff; transition: all 0.2s;">📊 Thống Kê Lượt Xem</a>';
             sidebarList.appendChild(li);
+          }
+          
+          // Khi Decap CMS đã khởi chạy xong, ẩn màn hình chờ đi một cách mượt mà
+          var cmsRoot = document.getElementById('nc-root');
+          var loadingScreen = document.getElementById('custom-loading-screen');
+          if (cmsRoot && cmsRoot.children.length > 0 && loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            setTimeout(function() {
+              loadingScreen.remove();
+            }, 400);
             clearInterval(checkInterval);
           }
-        }, 800);
+        }, 500);
       });
     </script>
+
     <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
   </body>
 </html>
