@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "camnangxedap",
   "type": "module",
   "version": "1.0.0",
@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",
