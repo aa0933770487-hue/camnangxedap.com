@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="404 - Lạc Mất Cung Đường" 
+  description="Trang hoặc cẩm nang bạn tìm kiếm không tồn tại trên CamNangXeDap.com."
+>
+  <main class="max-w-3xl mx-auto px-4 py-20 text-center flex flex-col items-center justify-center min-h-[65vh]">
+    <!-- Icon xe đạp hiệu ứng rung lắc nhẹ -->
+    <div class="relative mb-6">
+      <span class="text-7xl md:text-8xl select-none inline-block animate-bounce">🚲</span>
+      <span class="absolute -bottom-2 -right-2 bg-amber-500 text-slate-950 text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+        Lạc đường
+      </span>
+    </div>
+
+    <!-- Tiêu đề lỗi tiếng Việt -->
+    <h1 class="text-3xl md:text-5xl font-black text-brand-900 mb-3 tracking-tight">
+      404 - Lạc Mất Cung Đường!
+    </h1>
+
+    <p class="text-slate-600 text-sm md:text-base max-w-md mx-auto mb-8 leading-relaxed">
+      Có vẻ như bài viết hoặc cung đường bạn tìm kiếm đã đổi địa chỉ, bị dỡ bỏ, hoặc chưa từng tồn tại trên trang cẩm nang này.
+    </p>
+
+    <!-- Các nút điều hướng nhanh cho người đọc -->
+    <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+      <a 
+        href="/" 
+        class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2"
+      >
+        <span>🏠</span>
+        <span>Quay Về Trang Chủ</span>
+      </a>
+      <a 
+        href="/chuyen-muc/kinh-nghiem-chon-xe" 
+        class="bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm px-5 py-3 rounded-xl border border-slate-200 shadow-sm transition"
+      >
+        🎯 Kinh nghiệm chọn xe
+      </a>
+      <a 
+        href="/chuyen-muc/bao-duong-sua-chua" 
+        class="bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm px-5 py-3 rounded-xl border border-slate-200 shadow-sm transition"
+      >
+        🔧 Bảo dưỡng xích líp
+      </a>
+    </div>
+
+    <!-- Hộp gợi ý hỗ trợ -->
+    <div class="p-4 bg-brand-50 border border-brand-200/70 rounded-xl text-xs text-slate-600 max-w-md">
+      💡 <em>Mẹo:</em> Bạn có thể kiểm tra lại chính tả đường link trên thanh địa chỉ hoặc ghé thăm các bài viết nổi bật ngay tại trang chủ.
+    </div>
+  </main>
+</BaseLayout>
