@@ -1,6 +1,6 @@
 ﻿backend:
   name: github
-  repo: aa0933770487-hue/camnangxedap.com
+  repo: aa0933770487-hue/camnangxedap
   branch: main
   base_url: https://camnangxedap.pages.dev
   auth_endpoint: api/auth
