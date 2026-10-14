@@ -2,6 +2,8 @@
   name: github
   repo: aa0933770487-hue/camnangxedap.com
   branch: main
+  base_url: https://camnangxedap.pages.dev
+  auth_endpoint: api/auth
 
 media_folder: "public/images"
 public_folder: "/images"
