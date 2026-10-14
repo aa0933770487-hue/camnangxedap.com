@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Trị Bài Viết | Cẩm Nang Xe Đạp</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+  </head>
+  <body>
+    <script>
+      // Xóa token lỗi kẹt trong trình duyệt
+      try {
+        ['decap-cms-user', 'netlify-cms-user'].forEach(function(k) {
+          var v = localStorage.getItem(k);
+          if (v && (v.indexOf('"undefined"') !== -1 || v.indexOf('test-repo') !== -1)) {
+            localStorage.removeItem(k);
+          }
+        });
+      } catch (e) {
+        localStorage.clear();
+      }
+
+      // Tự động chèn nút Thống Kê vào menu bên trái
+      window.addEventListener('DOMContentLoaded', function() {
+        setInterval(function() {
+          var sidebarLists = document.querySelectorAll('aside ul, .nc-menu-list, ul[class*="nc-netlify-ui"]');
+          sidebarLists.forEach(function(sidebarList) {
+            if (sidebarList && !sidebarList.querySelector('#custom-sidebar-dashboard-btn')) {
+              var li = document.createElement('li');
+              li.style.cssText = 'margin: 6px 12px;';
+              li.innerHTML = '<a id="custom-sidebar-dashboard-btn" href="/dashboard" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; color: #1e293b; font-weight: 600; font-size: 14px; text-decoration: none; border-radius: 8px; background: #f1f5f9; transition: all 0.2s; border: 1px solid #e2e8f0;">📊 Thống Kê Lượt Xem</a>';
+              sidebarList.appendChild(li);
+            }
+          });
+        }, 300);
+      });
+    </script>
+    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+  </body>
+</html>
