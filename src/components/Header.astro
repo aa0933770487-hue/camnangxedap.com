@@ -1,0 +1,55 @@
+﻿---
+const categories = [
+  { name: 'Kinh nghiệm chọn xe', path: '/chuyen-muc/kinh-nghiem-chon-xe' },
+  { name: 'Bảo dưỡng & Sửa chữa', path: '/chuyen-muc/bao-duong-sua-chua' },
+  { name: 'Phụ kiện & Đồ chơi', path: '/chuyen-muc/phu-kien-do-choi' },
+  { name: 'Cung đường', path: '/chuyen-muc/cung-duong-trai-nghiem' },
+];
+---
+
+<header class="bg-brand-900 text-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="/" class="text-xl font-extrabold tracking-tight flex items-center gap-2 group">
+      <span class="text-2xl text-brand-accent group-hover:scale-110 transition-transform">🚲</span>
+      <span>CamNangXeDap<span class="text-brand-accent">.com</span></span>
+    </a>
+
+    <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium">
+      <a href="/" class="hover:text-brand-200 transition-colors">Trang chủ</a>
+      {categories.map((cat) => (
+        <a href={cat.path} class="hover:text-brand-200 transition-colors">{cat.name}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a 
+        href="https://shopxedap-chinh.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="bg-brand-600 hover:bg-brand-500 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm"
+      >
+        Cửa Hàng Đối Tác ↗
+      </a>
+      <button id="mobile-menu-btn" class="lg:hidden text-white p-1 focus:outline-none" aria-label="Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="hidden lg:hidden bg-brand-800 border-t border-brand-700 px-4 py-4 space-y-3 text-sm">
+    <a href="/" class="block hover:text-brand-200">Trang chủ</a>
+    {categories.map((cat) => (
+      <a href={cat.path} class="block hover:text-brand-200">{cat.name}</a>
+    ))}
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

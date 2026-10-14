@@ -1,0 +1,40 @@
+﻿---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-slate-900 text-slate-400 mt-20 border-t border-slate-800 text-sm">
+  <div class="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-2xl text-brand-accent">🚲</span>
+        <span class="text-white text-lg font-bold">CamNangXeDap.com</span>
+      </div>
+      <p class="text-slate-400 text-xs leading-relaxed max-w-sm mb-4">
+        Cổng thông tin phi thương mại chia sẻ kiến thức chọn xe, kỹ thuật tự sửa chữa và kinh nghiệm đi phượt.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="text-white font-semibold text-xs mb-3 uppercase tracking-wider">Chuyên Mục Chính</h3>
+      <ul class="space-y-2 text-xs">
+        <li><a href="/chuyen-muc/kinh-nghiem-chon-xe" class="hover:text-white">Kinh nghiệm chọn xe</a></li>
+        <li><a href="/chuyen-muc/bao-duong-sua-chua" class="hover:text-white">Bảo dưỡng & Sửa chữa</a></li>
+        <li><a href="/chuyen-muc/phu-kien-do-choi" class="hover:text-white">Phụ kiện & Đồ phượt</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-white font-semibold text-xs mb-3 uppercase tracking-wider">Tài Trợ & Liên Kết</h3>
+      <p class="text-xs leading-relaxed text-slate-400">
+        Nội dung kỹ thuật được đồng hành bởi 
+        <a href="https://shopxedap-chinh.com" target="_blank" rel="noopener noreferrer" class="text-white underline hover:text-brand-200">
+          Hệ Thống Xe Đạp Chính Hãng
+        </a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="border-t border-slate-800/80 py-5 text-center text-xs text-slate-500">
+    &copy; {currentYear} CamNangXeDap.com. All rights reserved.
+  </div>
+</footer>

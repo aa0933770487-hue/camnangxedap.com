@@ -1,0 +1,102 @@
+﻿---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PartnerBox from '../components/PartnerBox.astro';
+import PostCard from '../components/PostCard.astro';
+import Bike3DViewer from '../components/Bike3DViewer.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+const allPosts = await getCollection('posts');
+const relatedPosts = allPosts
+  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
+  .slice(0, 2);
+
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <nav class="text-xs text-slate-500 mb-6 flex items-center gap-2">
+      <a href="/" class="hover:text-brand-600">Trang chủ</a>
+      <span>/</span>
+      <span class="text-brand-700 font-medium">{post.data.category}</span>
+    </nav>
+
+    <header class="mb-8 pb-6 border-b border-slate-200">
+      <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-accent mb-3">
+        <span class="bg-brand-50 px-2.5 py-1 rounded text-brand-700">{post.data.category}</span>
+        <span>•</span>
+        <time class="text-slate-500 font-normal">{post.data.pubDate.toLocaleDateString('vi-VN')}</time>
+        <span>•</span>
+        <span class="text-slate-500 font-normal">{post.data.readTime} đọc</span>
+      </div>
+
+      <h1 class="text-2xl md:text-4xl font-extrabold text-brand-900 leading-tight mb-4">
+        {post.data.title}
+      </h1>
+
+      <p class="text-base text-slate-600 italic bg-slate-100/70 p-4 rounded-lg border-l-4 border-brand-600">
+        {post.data.description}
+      </p>
+    </header>
+
+    <!-- Khung xem ảnh đa góc độ (Nếu bài viết có tải bộ ảnh riêng sẽ hiện ảnh riêng, nếu chưa có sẽ hiện bộ ảnh mẫu) -->
+    <Bike3DViewer 
+      title={`Chi tiết góc nhìn: ${post.data.title}`} 
+      images={post.data.gallery && post.data.gallery.length > 0 ? post.data.gallery : undefined} 
+    />
+
+    {toc.length > 0 && (
+      <aside class="mb-8 p-5 bg-blue-50/60 rounded-xl border border-brand-100">
+        <h3 class="text-sm font-bold text-brand-900 mb-3 uppercase tracking-wider">📌 Mục Lục Nội Dung</h3>
+        <ul class="space-y-1.5 text-sm">
+          {toc.map((heading) => (
+            <li class={heading.depth === 3 ? 'ml-4' : ''}>
+              <a href={`#${heading.slug}`} class="text-slate-700 hover:text-brand-600 transition flex items-center gap-1.5">
+                <span class="text-brand-500 text-xs">•</span>
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+
+    <article class="prose prose-blue max-w-none prose-headings:text-brand-900 prose-a:text-brand-600">
+      <Content />
+    </article>
+
+    <PartnerBox />
+
+    {relatedPosts.length > 0 && (
+      <section class="mt-14 pt-8 border-t border-slate-200">
+        <h2 class="text-xl font-bold text-brand-900 mb-6 border-l-4 border-brand-600 pl-3">
+          Bài Viết Cùng Chuyên Mục
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {relatedPosts.map((rPost) => (
+            <PostCard
+              title={rPost.data.title}
+              description={rPost.data.description}
+              slug={rPost.slug}
+              category={rPost.data.category}
+              date={rPost.data.pubDate}
+              readTime={rPost.data.readTime}
+              image={rPost.data.image}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</BaseLayout>

@@ -1,0 +1,61 @@
+﻿---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const categoryMap = [
+    { slug: 'kinh-nghiem-chon-xe', name: 'Kinh nghiệm chọn xe' },
+    { slug: 'bao-duong-sua-chua', name: 'Bảo dưỡng & Sửa chữa' },
+    { slug: 'phu-kien-do-choi', name: 'Phụ kiện & Đồ chơi' },
+    { slug: 'cung-duong-trai-nghiem', name: 'Cung đường & Trải nghiệm' },
+  ];
+
+  const allPosts = await getCollection('posts');
+
+  return categoryMap.map((cat) => {
+    const filteredPosts = allPosts
+      .filter((p) => p.data.category === cat.name)
+      .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+    return {
+      params: { category: cat.slug },
+      props: { categoryName: cat.name, posts: filteredPosts },
+    };
+  });
+}
+
+const { categoryName, posts } = Astro.props;
+---
+
+<BaseLayout 
+  title={`Chuyên mục: ${categoryName}`} 
+  description={`Tổng hợp các bài viết hướng dẫn về ${categoryName}.`}
+>
+  <main class="max-w-6xl mx-auto px-4 py-12">
+    <div class="mb-10 text-center">
+      <h1 class="text-3xl font-extrabold text-brand-900">{categoryName}</h1>
+      <p class="text-sm text-slate-600 mt-2">Tổng hợp {posts.length} bài viết hướng dẫn chuyên sâu.</p>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            slug={post.slug}
+            category={post.data.category}
+            date={post.data.pubDate}
+            readTime={post.data.readTime}
+            image={post.data.image}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16 bg-white rounded-xl border border-slate-200">
+        <p class="text-slate-500">Chưa có bài viết trong chuyên mục này.</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>
