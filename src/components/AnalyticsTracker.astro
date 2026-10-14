@@ -1,0 +1,42 @@
+---
+---
+<!-- Bộ thu thập dữ liệu phân tích nhẹ, không làm chậm trang (Zero-overhead Tracker) -->
+<script is:inline>
+  (function() {
+    // Không theo dõi khi admin đang xem hoặc ở localhost nếu muốn
+    var path = window.location.pathname;
+    if (path.startsWith('/admin')) return;
+
+    var startTime = Date.now();
+    var pageTitle = document.title.replace(' | Cẩm Nang Xe Đạp', '');
+    
+    // Gửi sự kiện Pageview
+    var logVisit = function(duration) {
+      try {
+        var logs = JSON.parse(localStorage.getItem('cnxd_analytics_logs') || '[]');
+        logs.push({
+          path: path,
+          title: pageTitle,
+          duration: duration || 0,
+          timestamp: Date.now(),
+          device: window.innerWidth < 768 ? 'Mobile' : 'Desktop',
+          referrer: document.referrer ? (new URL(document.referrer)).hostname : 'Trực tiếp'
+        });
+        // Giới hạn 200 bản ghi mới nhất trên client
+        if (logs.length > 200) logs.shift();
+        localStorage.setItem('cnxd_analytics_logs', JSON.stringify(logs));
+      } catch(e) {}
+    };
+
+    // Ghi nhận lượt xem ban đầu
+    logVisit(0);
+
+    // Khi người dùng rời trang, tính tổng thời lượng đọc bài (giây)
+    window.addEventListener('beforeunload', function() {
+      var readDuration = Math.round((Date.now() - startTime) / 1000);
+      if (readDuration > 1) {
+        logVisit(readDuration);
+      }
+    });
+  })();
+</script>
