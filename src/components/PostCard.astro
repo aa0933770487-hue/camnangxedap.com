@@ -6,18 +6,28 @@ interface Props {
   category: string;
   date: Date;
   readTime: string;
+  image?: string;
 }
 
-const { title, description, slug, category, date, readTime } = Astro.props;
+const { title, description, slug, category, date, readTime, image } = Astro.props;
 ---
 
 <article class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md hover:border-brand-500 transition duration-200 flex flex-col group">
-  <div class="h-44 bg-gradient-to-br from-brand-50 to-brand-100 flex items-center justify-center border-b border-slate-100 relative">
-    <span class="text-4xl text-brand-600/40 group-hover:scale-110 transition-transform">🚲</span>
-    <span class="absolute top-3 left-3 bg-brand-900 text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">
+  <a href={`/${slug}`} class="h-48 bg-gradient-to-br from-brand-50 to-brand-100 flex items-center justify-center border-b border-slate-100 relative overflow-hidden">
+    {image ? (
+      <img 
+        src={image} 
+        alt={title} 
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+      />
+    ) : (
+      <span class="text-4xl text-brand-600/40 group-hover:scale-110 transition-transform">🚲</span>
+    )}
+    <span class="absolute top-3 left-3 bg-brand-900/90 backdrop-blur-sm text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">
       {category}
     </span>
-  </div>
+  </a>
 
   <div class="p-5 flex flex-col flex-grow">
     <div class="flex items-center gap-2 text-xs text-slate-500 mb-2">

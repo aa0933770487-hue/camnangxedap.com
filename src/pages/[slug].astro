@@ -45,12 +45,23 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
         {post.data.title}
       </h1>
 
-      <p class="text-base text-slate-600 italic bg-slate-100/70 p-4 rounded-lg border-l-4 border-brand-600">
+      <p class="text-base text-slate-600 italic bg-slate-100/70 p-4 rounded-lg border-l-4 border-brand-600 mb-6">
         {post.data.description}
       </p>
+
+      {/* Ảnh bìa lớn của bài viết nếu có */}
+      {post.data.image && (
+        <div class="my-6 rounded-2xl overflow-hidden border border-slate-200 shadow-sm max-h-[460px]">
+          <img 
+            src={post.data.image} 
+            alt={post.data.title} 
+            class="w-full h-full object-cover"
+          />
+        </div>
+      )}
     </header>
 
-    <!-- Khung xem ảnh đa góc độ (Nếu bài viết có tải bộ ảnh riêng sẽ hiện ảnh riêng, nếu chưa có sẽ hiện bộ ảnh mẫu) -->
+    <!-- Khung xem ảnh đa góc độ -->
     <Bike3DViewer 
       title={`Chi tiết góc nhìn: ${post.data.title}`} 
       images={post.data.gallery && post.data.gallery.length > 0 ? post.data.gallery : undefined} 
