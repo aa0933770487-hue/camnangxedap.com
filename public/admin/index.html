@@ -18,11 +18,11 @@
         z-index: 99999;
         font-family: system-ui, -apple-system, sans-serif;
         color: #ffffff;
-        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
       }
       .loading-spinner {
-        width: 64px;
-        height: 64px;
+        width: 68px;
+        height: 68px;
         border: 4px solid rgba(6, 182, 212, 0.2);
         border-top: 4px solid #06b6d4;
         border-radius: 50%;
@@ -30,14 +30,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 26px;
       }
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
       .loading-title {
-        margin-top: 20px;
+        margin-top: 22px;
         font-size: 16px;
         font-weight: 700;
         letter-spacing: 0.05em;
@@ -54,7 +54,7 @@
     <div id="custom-loading-screen">
       <div class="loading-spinner">🚲</div>
       <div class="loading-title">CẨM NANG XE ĐẠP • TRUNG TÂM QUẢN TRỊ</div>
-      <div class="loading-subtitle">Đang nạp hệ thống và đồng bộ menu...</div>
+      <div class="loading-subtitle">Đang nạp dữ liệu và khởi tạo giao diện an toàn...</div>
     </div>
 
     <script>
@@ -70,8 +70,16 @@
       }
 
       window.addEventListener('DOMContentLoaded', function() {
+        var isReady = false;
+        var minTimePassed = false;
+
+        // Đảm bảo màn hình chờ bắt buộc hiển thị ít nhất 1.8 giây để che hoàn toàn thời gian load của CMS
+        setTimeout(function() {
+          minTimePassed = true;
+          tryHideLoading();
+        }, 1800);
+
         var checkInterval = setInterval(function() {
-          // Tìm chính xác thanh menu bên trái (Sidebar) của Decap CMS để chèn nút Dashboard vào đứng chung hàng
           var sidebarList = document.querySelector('aside ul') || document.querySelector('.nc-menu-list') || document.querySelector('ul[class*="nc-netlify-ui"]');
           
           if (sidebarList && !document.getElementById('custom-sidebar-dashboard-btn')) {
@@ -82,16 +90,25 @@
           }
           
           var cmsRoot = document.getElementById('nc-root');
-          var loadingScreen = document.getElementById('custom-loading-screen');
-          if (cmsRoot && cmsRoot.children.length > 0 && loadingScreen) {
-            loadingScreen.style.opacity = '0';
-            loadingScreen.style.visibility = 'hidden';
-            setTimeout(function() {
-              loadingScreen.remove();
-            }, 500);
+          if (cmsRoot && cmsRoot.children.length > 0) {
+            isReady = true;
+            tryHideLoading();
+          }
+        }, 200);
+
+        function tryHideLoading() {
+          if (isReady && minTimePassed) {
+            var loadingScreen = document.getElementById('custom-loading-screen');
+            if (loadingScreen) {
+              loadingScreen.style.opacity = '0';
+              loadingScreen.style.visibility = 'hidden';
+              setTimeout(function() {
+                loadingScreen.remove();
+              }, 600);
+            }
             clearInterval(checkInterval);
           }
-        }, 300);
+        }
       });
     </script>
 
