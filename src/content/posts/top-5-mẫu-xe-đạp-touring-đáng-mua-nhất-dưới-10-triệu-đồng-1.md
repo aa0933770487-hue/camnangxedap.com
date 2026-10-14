@@ -5,7 +5,7 @@ description: Đánh giá chi tiết 5 mẫu xe touring giá rẻ với khung nh�
   líp tầng mượt mà, tải đồ tốt cho các chuyến đi xa.
 pubDate: 2026-10-14
 category: Kinh nghiệm chọn xe
-author: Tằng Tấn Phúc
+author: Tằng Tấn P
 featured: true
 readTime: 6 phút
 ---
