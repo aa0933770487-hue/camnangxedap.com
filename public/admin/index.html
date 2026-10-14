@@ -6,18 +6,14 @@
     <title>Quản Trị Bài Viết | Cẩm Nang Xe Đạp</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <style>
+      /* Tùy chỉnh CSS nhẹ để thêm nút Dashboard vào menu bên trái của Decap CMS trông cực kỳ mượt mà */
+      .nc-app-header-actions { gap: 12px; }
+    </style>
   </head>
   <body>
-    <!-- Nút lối tắt chuyển nhanh sang trang Thống Kê Dashboard ở góc trên -->
-    <a 
-      href="/dashboard"
-      style="position:fixed;top:14px;right:160px;z-index:99999;background:#0f2744;color:#38bdf8;border:1px solid #0284c7;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:bold;text-decoration:none;font-family:sans-serif;display:flex;items-center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.3);"
-    >
-      📊 Xem Dashboard Thống Kê
-    </a>
-
     <script>
-      // Tự động xóa token lỗi kẹt trong trình duyệt
+      // Xóa token lỗi kẹt trong trình duyệt
       try {
         ['decap-cms-user', 'netlify-cms-user'].forEach(function(k) {
           var v = localStorage.getItem(k);
@@ -28,6 +24,24 @@
       } catch (e) {
         localStorage.clear();
       }
+
+      // Tự động chèn thêm nút mở Dashboard Thống Kê vào menu điều hướng bên trái khi CMS tải xong
+      window.addEventListener('DOMContentLoaded', function() {
+        var checkInterval = setInterval(function() {
+          var nav = document.querySelector('ul[class*="nc-netlify-ui-CollectionList"]');
+          if (!nav) {
+            nav = document.querySelector('nav');
+          }
+          // Tìm thanh sidebar menu bên trái
+          var sidebarList = document.querySelector('aside ul') || document.querySelector('.nc-menu-list');
+          if (sidebarList && !document.getElementById('custom-dashboard-nav-btn')) {
+            var li = document.createElement('li');
+            li.style.cssText = 'margin-top: 12px; border-top: 1px solid #e2e8f0; padding-top: 12px;';
+            li.innerHTML = '<a id="custom-dashboard-nav-btn" href="/dashboard" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; color: #0284c7; font-weight: 600; font-size: 13px; text-decoration: none; border-radius: 8px; background: #f0f9ff; transition: all 0.2s;">📊 Thống Kê Dashboard</a>';
+            sidebarList.appendChild(li);
+          }
+        }, 1000);
+      });
     </script>
     <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
   </body>
