@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="utf-8" />
@@ -8,8 +8,16 @@
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
+    <!-- Nút lối tắt chuyển nhanh sang trang Thống Kê Dashboard ở góc trên -->
+    <a 
+      href="/dashboard"
+      style="position:fixed;top:14px;right:160px;z-index:99999;background:#0f2744;color:#38bdf8;border:1px solid #0284c7;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:bold;text-decoration:none;font-family:sans-serif;display:flex;items-center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.3);"
+    >
+      📊 Xem Dashboard Thống Kê
+    </a>
+
     <script>
-      // Xoa sach token loi "undefined" dang ket trong trinh duyet
+      // Tự động xóa token lỗi kẹt trong trình duyệt
       try {
         ['decap-cms-user', 'netlify-cms-user'].forEach(function(k) {
           var v = localStorage.getItem(k);
