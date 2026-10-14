@@ -1,31 +1,34 @@
-﻿---
+---
 interface Props {
   title?: string;
+  images?: any[];
 }
 
 const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.props;
 ---
 
-<!-- ================= NÚT THU GỌN GÓC PHẢI MÀN HÌNH (CỰC NỔI BẬT) ================= -->
+<!-- NÚT THU GỌN GÓC PHẢI - ICON VECTOR CHUYÊN NGHIỆP -->
 <div class="fixed bottom-6 right-6 z-40">
   <button 
     id="open-3d-btn"
     type="button"
-    class="group relative flex items-center gap-3 bg-gradient-to-r from-brand-900 via-brand-800 to-blue-900 text-white pl-3.5 pr-5 py-3 rounded-full shadow-[0_10px_25px_rgba(37,99,235,0.45)] border-2 border-cyan-400 hover:border-white hover:scale-105 active:scale-95 transition-all duration-300"
-    title="Bấm để mở chế độ xem 3D xoay 360 độ"
+    class="group relative flex items-center gap-3 bg-gradient-to-r from-slate-950 via-brand-900 to-blue-950 text-white pl-3.5 pr-5 py-3 rounded-2xl shadow-[0_10px_25px_rgba(37,99,235,0.45)] border-2 border-cyan-400 hover:border-white hover:scale-105 active:scale-95 transition-all duration-300"
+    title="Bấm để mở chế độ tương tác 3D 360°"
   >
-    <!-- Vòng phát sáng nhấp nháy tạo sự chú ý -->
     <span class="absolute -top-1 -right-1 flex h-4 w-4">
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-4 w-4 bg-cyan-500 border border-white"></span>
     </span>
 
-    <!-- Biểu tượng 3D xoay động -->
-    <div class="w-9 h-9 rounded-full bg-blue-600/60 border border-cyan-400/50 flex items-center justify-center text-lg shadow-inner group-hover:rotate-12 transition-transform">
-      🚴
+    <!-- Icon 3D Box Vector -->
+    <div class="w-9 h-9 rounded-xl bg-blue-600/40 border border-cyan-400/50 flex items-center justify-center text-cyan-300 shadow-inner group-hover:rotate-12 transition-transform">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+        <line x1="12" y1="22.08" x2="12" y2="12"/>
+      </svg>
     </div>
 
-    <!-- Nhãn chữ nổi bật -->
     <div class="text-left">
       <div class="flex items-center gap-1.5">
         <span class="text-[10px] font-black uppercase tracking-wider bg-cyan-400 text-slate-950 px-1.5 py-0.5 rounded leading-none">
@@ -34,30 +37,27 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
         <span class="text-[11px] text-cyan-200 font-semibold">Tương tác</span>
       </div>
       <div class="text-xs font-bold text-white tracking-wide">
-        Xem Xe Đa Hướng
+        Mô Hình Kỹ Thuật
       </div>
     </div>
   </button>
 </div>
 
-<!-- ================= CỬA SỔ POPUP 3D TOÀN CẢNH (KHI BẤM XEM MỚI HIỆN) ================= -->
+<!-- MODAL CỬA SỔ 3D -->
 <div 
   id="modal-3d" 
   class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 transition-opacity duration-300"
 >
   <div class="relative w-full max-w-4xl bg-slate-900 rounded-3xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-    
-    <!-- Thanh điều khiển trên cùng -->
     <div class="px-5 py-3.5 bg-slate-950 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2">
         <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
         <h3 class="text-sm font-bold text-white tracking-wide uppercase">{title}</h3>
       </div>
 
-      <!-- Đổi màu khung & Nút đóng -->
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">
-          <span class="text-slate-400 text-[11px]">Màu:</span>
+          <span class="text-slate-400 text-[11px]">Sơn:</span>
           <button data-color="#2563eb" class="color-btn w-4 h-4 rounded-full bg-blue-600 border border-white hover:scale-125 transition" title="Xanh Royal"></button>
           <button data-color="#0284c7" class="color-btn w-4 h-4 rounded-full bg-sky-500 hover:scale-125 transition" title="Xanh Cyan"></button>
           <button data-color="#0f2744" class="color-btn w-4 h-4 rounded-full bg-[#0f2744] border border-slate-600 hover:scale-125 transition" title="Xanh Navy"></button>
@@ -67,41 +67,43 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
         <button 
           id="close-3d-btn"
           class="w-8 h-8 rounded-full bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white flex items-center justify-center font-bold text-base transition"
-          title="Đóng cửa sổ 3D"
+          title="Đóng cửa sổ"
         >
           ✕
         </button>
       </div>
     </div>
 
-    <!-- Khung 3D tương tác chính -->
     <div class="relative w-full h-[460px] bg-gradient-to-b from-slate-900 via-[#0a1626] to-slate-950 flex-grow">
       <div id="modal-bike-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
-      <!-- Cụm nút góc nhìn -->
+      <!-- Góc nhìn có icon Vector chuẩn -->
       <div class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
         <div class="flex flex-wrap gap-1.5 pointer-events-auto bg-slate-950/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-800">
-          <button data-cam="overview" class="cam-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white text-[11px] font-semibold transition">
-            🔄 Toàn cảnh
+          <button data-cam="overview" class="cam-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white text-[11px] font-semibold transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span>Toàn cảnh</span>
           </button>
-          <button data-cam="drivetrain" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition">
-            ⚙️ Xích líp
+          <button data-cam="drivetrain" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Bộ số líp</span>
           </button>
-          <button data-cam="cockpit" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition">
-            🚲 Ghi đông
+          <button data-cam="cockpit" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+            <span>Ghi đông</span>
           </button>
-          <button data-cam="brake" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition">
-            🛞 Phanh đĩa
+          <button data-cam="brake" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            <span>Phanh đĩa</span>
           </button>
         </div>
 
         <span class="hidden sm:inline-block bg-slate-950/70 text-slate-400 text-[11px] px-3 py-1 rounded-lg border border-slate-800 pointer-events-none">
-          🖱️ Giữ chuột xoay 360° • Lăn chuột phóng to
+          Chuột trái xoay 360° • Lăn chuột phóng to
         </span>
       </div>
     </div>
 
-    <!-- Chân Modal gắn link web đối tác -->
     <div class="px-5 py-3 bg-slate-950 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
       <span class="text-xs text-slate-400">Khung xe mô phỏng chi tiết theo chuẩn Touring quốc tế</span>
       <a 
@@ -111,13 +113,12 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
         class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow flex items-center gap-1.5"
       >
         <span>Xem giá xe thực tế tại Cửa Hàng</span>
-        <span>↗</span>
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       </a>
     </div>
   </div>
 </div>
 
-<!-- ================= SCRIPT KHỞI CHẠY 3D KHI MỞ MODAL ================= -->
 <script type="module">
   import * as THREE from 'https://esm.sh/three@0.160.0';
   import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
@@ -133,7 +134,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
 
   function initThree() {
     if (isInitialized || !container) return;
-
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 100);
     camera.position.set(0, 0.6, 3.6);
@@ -153,7 +153,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
     controls.maxDistance = 5.5;
     controls.target.set(0, 0.25, 0);
 
-    // Ánh sáng
     scene.add(new THREE.AmbientLight(0xffffff, 0.9));
     const mainLight = new THREE.DirectionalLight(0xffffff, 1.8);
     mainLight.position.set(4, 6, 5);
@@ -163,12 +162,10 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
     rimLight.position.set(-4, 3, -4);
     scene.add(rimLight);
 
-    // Sàn lưới kỹ thuật
     const grid = new THREE.GridHelper(6, 24, 0x1e3a8a, 0x1e293b);
     grid.position.y = -0.68;
     scene.add(grid);
 
-    // Vật liệu
     frameMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, metalness: 0.65, roughness: 0.25 });
     const darkMetal = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.3 });
     const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9, roughness: 0.15 });
@@ -194,11 +191,9 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
       g.position.set(xPos, 0, 0);
       g.add(new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.055, 14, 42), tireMat));
       g.add(new THREE.Mesh(new THREE.TorusGeometry(0.57, 0.018, 10, 42), darkMetal));
-
       const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.18, 14), chromeMat);
       hub.rotation.x = Math.PI / 2;
       g.add(hub);
-
       const rotor = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.008, 20), chromeMat);
       rotor.rotation.x = Math.PI / 2;
       rotor.position.z = -0.07;
@@ -217,7 +212,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
         const a = (i / 16) * Math.PI * 2;
         g.add(createTube([0, 0, i % 2 === 0 ? 0.04 : -0.04], [Math.cos(a) * 0.56, Math.sin(a) * 0.56, 0], 0.004, chromeMat));
       }
-
       wheels.push(g);
       return g;
     }
@@ -225,7 +219,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
     bikeGroup.add(createWheel(-1.1, true));
     bikeGroup.add(createWheel(1.1, false));
 
-    // Khung sườn
     const BB = [-0.25, -0.05, 0];
     const ST = [-0.48, 0.78, 0];
     const HT = [0.62, 0.86, 0];
@@ -241,8 +234,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
     bikeGroup.add(createTube([-0.46, 0.70, -0.035], [-1.1, 0, -0.09], 0.016, frameMat));
     bikeGroup.add(createTube([0.73, 0.50, 0.075], [1.1, 0, 0.085], 0.022, frameMat));
     bikeGroup.add(createTube([0.73, 0.50, -0.075], [1.1, 0, -0.085], 0.022, frameMat));
-
-    // Ghi đông & Yên
     bikeGroup.add(createTube(HT, [0.58, 1.0, 0], 0.024, darkMetal));
     bikeGroup.add(createTube([0.58, 1.0, 0], [0.74, 1.02, 0], 0.024, darkMetal));
     bikeGroup.add(createTube([0.74, 1.02, -0.42], [0.74, 1.02, 0.42], 0.018, chromeMat));
@@ -251,7 +242,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
     saddle.position.set(-0.56, 1.0, 0);
     bikeGroup.add(saddle);
 
-    // Đổi màu khung
     document.querySelectorAll('.color-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         const hex = e.currentTarget.getAttribute('data-color');
@@ -259,7 +249,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
       });
     });
 
-    // Chuyển góc nhìn
     const camPresets = {
       overview: { pos: [0, 0.6, 3.6], target: [0, 0.25, 0], autoRotate: true },
       drivetrain: { pos: [-0.65, -0.05, 1.45], target: [-0.65, -0.05, 0], autoRotate: false },
@@ -278,9 +267,9 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
         controls.update();
 
         document.querySelectorAll('.cam-btn').forEach((b) => {
-          b.className = "cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition";
+          b.className = "cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition flex items-center gap-1";
         });
-        e.currentTarget.className = "cam-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white text-[11px] font-semibold transition";
+        e.currentTarget.className = "cam-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white text-[11px] font-semibold transition flex items-center gap-1";
       });
     });
 
@@ -294,7 +283,6 @@ const { title = "Khám phá kết cấu xe 3D tương tác 360°" } = Astro.prop
     isInitialized = true;
   }
 
-  // Mở & Đóng Modal
   openBtn?.addEventListener('click', () => {
     modal?.classList.remove('hidden');
     modal?.classList.add('flex');

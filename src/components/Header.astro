@@ -1,4 +1,4 @@
-﻿---
+---
 const categories = [
   { name: 'Kinh nghiệm chọn xe', path: '/chuyen-muc/kinh-nghiem-chon-xe' },
   { name: 'Bảo dưỡng & Sửa chữa', path: '/chuyen-muc/bao-duong-sua-chua' },
@@ -7,17 +7,25 @@ const categories = [
 ];
 ---
 
-<header class="bg-brand-900 text-white shadow-md sticky top-0 z-50">
+<header class="bg-brand-900 text-white shadow-md sticky top-0 z-50 border-b border-brand-800/80">
   <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-    <a href="/" class="text-xl font-extrabold tracking-tight flex items-center gap-2 group">
-      <span class="text-2xl text-brand-accent group-hover:scale-110 transition-transform">🚲</span>
-      <span>CamNangXeDap<span class="text-brand-accent">.com</span></span>
+    <a href="/" class="text-xl font-extrabold tracking-tight flex items-center gap-2.5 group">
+      <div class="w-9 h-9 rounded-xl bg-brand-800 border border-cyan-400/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:border-cyan-400 transition-all shadow-inner">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="17" r="3.5"/>
+          <circle cx="6" cy="17" r="3.5"/>
+          <path d="M6 17h5l3-7h4"/>
+          <path d="M12 17l-3-7"/>
+          <path d="M15 6h2"/>
+        </svg>
+      </div>
+      <span class="tracking-tight">CamNangXeDap<span class="text-cyan-400">.com</span></span>
     </a>
 
     <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium">
-      <a href="/" class="hover:text-brand-200 transition-colors">Trang chủ</a>
+      <a href="/" class="hover:text-cyan-300 transition-colors">Trang chủ</a>
       {categories.map((cat) => (
-        <a href={cat.path} class="hover:text-brand-200 transition-colors">{cat.name}</a>
+        <a href={cat.path} class="hover:text-cyan-300 transition-colors">{cat.name}</a>
       ))}
     </nav>
 
@@ -26,11 +34,16 @@ const categories = [
         href="https://shopxedap-chinh.com" 
         target="_blank" 
         rel="noopener noreferrer"
-        class="bg-brand-600 hover:bg-brand-500 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm"
+        class="bg-brand-600 hover:bg-brand-500 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5 active:scale-95"
       >
-        Cửa Hàng Đối Tác ↗
+        <span>Cửa Hàng Đối Tác</span>
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
       </a>
-      <button id="mobile-menu-btn" class="lg:hidden text-white p-1 focus:outline-none" aria-label="Menu">
+      <button id="mobile-menu-btn" class="lg:hidden text-white p-2 rounded-lg hover:bg-brand-800 transition focus:outline-none" aria-label="Menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
@@ -38,10 +51,10 @@ const categories = [
     </div>
   </div>
 
-  <div id="mobile-menu" class="hidden lg:hidden bg-brand-800 border-t border-brand-700 px-4 py-4 space-y-3 text-sm">
-    <a href="/" class="block hover:text-brand-200">Trang chủ</a>
+  <div id="mobile-menu" class="hidden lg:hidden bg-brand-950 border-t border-brand-800 px-4 py-4 space-y-3 text-sm">
+    <a href="/" class="block hover:text-cyan-300">Trang chủ</a>
     {categories.map((cat) => (
-      <a href={cat.path} class="block hover:text-brand-200">{cat.name}</a>
+      <a href={cat.path} class="block hover:text-cyan-300">{cat.name}</a>
     ))}
   </div>
 </header>
