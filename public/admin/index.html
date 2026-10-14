@@ -7,7 +7,6 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <style>
-      /* Màn hình chờ phong cách công nghệ cao */
       #custom-loading-screen {
         position: fixed;
         inset: 0;
@@ -19,7 +18,7 @@
         z-index: 99999;
         font-family: system-ui, -apple-system, sans-serif;
         color: #ffffff;
-        transition: opacity 0.4s ease-out;
+        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
       }
       .loading-spinner {
         width: 64px;
@@ -52,15 +51,13 @@
     </style>
   </head>
   <body>
-    <!-- Giao diện màn hình chờ tùy chỉnh -->
     <div id="custom-loading-screen">
       <div class="loading-spinner">🚲</div>
       <div class="loading-title">CẨM NANG XE ĐẠP • TRUNG TÂM QUẢN TRỊ</div>
-      <div class="loading-subtitle">Đang nạp hệ thống và kết nối dữ liệu bảo mật...</div>
+      <div class="loading-subtitle">Đang nạp hệ thống và đồng bộ menu...</div>
     </div>
 
     <script>
-      // Xóa token lỗi kẹt trong trình duyệt
       try {
         ['decap-cms-user', 'netlify-cms-user'].forEach(function(k) {
           var v = localStorage.getItem(k);
@@ -72,28 +69,29 @@
         localStorage.clear();
       }
 
-      // Tự động thêm nút chuyển sang Thống Kê Dashboard vào menu trái khi CMS load xong
       window.addEventListener('DOMContentLoaded', function() {
         var checkInterval = setInterval(function() {
+          // Tìm chính xác thanh menu bên trái (Sidebar) của Decap CMS để chèn nút Dashboard vào đứng chung hàng
           var sidebarList = document.querySelector('aside ul') || document.querySelector('.nc-menu-list') || document.querySelector('ul[class*="nc-netlify-ui"]');
-          if (sidebarList && !document.getElementById('custom-dashboard-btn')) {
+          
+          if (sidebarList && !document.getElementById('custom-sidebar-dashboard-btn')) {
             var li = document.createElement('li');
-            li.style.cssText = 'margin-top: 16px; border-top: 1px solid #e2e8f0; padding-top: 16px;';
-            li.innerHTML = '<a id="custom-dashboard-btn" href="/dashboard" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; color: #2563eb; font-weight: 700; font-size: 13px; text-decoration: none; border-radius: 8px; background: #eff6ff; transition: all 0.2s;">📊 Thống Kê Lượt Xem</a>';
+            li.style.cssText = 'margin: 6px 12px;';
+            li.innerHTML = '<a id="custom-sidebar-dashboard-btn" href="/dashboard" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; color: #1e293b; font-weight: 600; font-size: 14px; text-decoration: none; border-radius: 8px; background: #f1f5f9; transition: all 0.2s; border: 1px solid #e2e8f0;">📊 Thống Kê Lượt Xem</a>';
             sidebarList.appendChild(li);
           }
           
-          // Khi Decap CMS đã khởi chạy xong, ẩn màn hình chờ đi một cách mượt mà
           var cmsRoot = document.getElementById('nc-root');
           var loadingScreen = document.getElementById('custom-loading-screen');
           if (cmsRoot && cmsRoot.children.length > 0 && loadingScreen) {
             loadingScreen.style.opacity = '0';
+            loadingScreen.style.visibility = 'hidden';
             setTimeout(function() {
               loadingScreen.remove();
-            }, 400);
+            }, 500);
             clearInterval(checkInterval);
           }
-        }, 500);
+        }, 300);
       });
     </script>
 
