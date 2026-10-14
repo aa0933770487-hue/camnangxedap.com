@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản Trị Bài Viết | Cẩm Nang Xe Đạp</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
+    <script>
+      // Xoa sach token loi "undefined" dang ket trong trinh duyet
+      try {
+        ['decap-cms-user', 'netlify-cms-user'].forEach(function(k) {
+          var v = localStorage.getItem(k);
+          if (v && (v.indexOf('"undefined"') !== -1 || v.indexOf('test-repo') !== -1)) {
+            localStorage.removeItem(k);
+          }
+        });
+      } catch (e) {
+        localStorage.clear();
+      }
+    </script>
     <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
   </body>
 </html>
