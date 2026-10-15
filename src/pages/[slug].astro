@@ -1,4 +1,4 @@
-﻿---
+---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PartnerBox from '../components/PartnerBox.astro';
@@ -26,13 +26,14 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 <BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <main class="max-w-4xl mx-auto px-4 py-10">
+    <!-- Breadcrumb -->
     <nav class="text-xs text-slate-500 mb-6 flex items-center gap-2">
       <a href="/" class="hover:text-brand-600">Trang chủ</a>
       <span>/</span>
       <span class="text-brand-700 font-medium">{post.data.category}</span>
     </nav>
 
-    <header class="mb-8 pb-6 border-b border-slate-200">
+    <header class="mb-8">
       <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-accent mb-3">
         <span class="bg-brand-50 px-2.5 py-1 rounded text-brand-700">{post.data.category}</span>
         <span>•</span>
@@ -45,31 +46,29 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
         {post.data.title}
       </h1>
 
-      <p class="text-base text-slate-600 italic bg-slate-100/70 p-4 rounded-lg border-l-4 border-brand-600 mb-6">
+      <p class="text-sm md:text-base text-slate-600 italic bg-blue-50/60 p-4 rounded-xl border-l-4 border-brand-600 mb-6">
         {post.data.description}
       </p>
 
-      {/* Ảnh bìa lớn của bài viết nếu có */}
       {post.data.image && (
-        <div class="my-6 rounded-2xl overflow-hidden border border-slate-200 shadow-sm max-h-[460px]">
-          <img 
-            src={post.data.image} 
-            alt={post.data.title} 
-            class="w-full h-full object-cover"
-          />
+        <div class="w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden border border-slate-200 shadow-sm mb-8 bg-slate-100">
+          <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover" />
         </div>
       )}
     </header>
 
-    <!-- Khung xem ảnh đa góc độ -->
+    <!-- Trình chiếu xoay ảnh thực tế 360 độ ngoài trang người xem -->
     <Bike3DViewer 
-      title={`Chi tiết góc nhìn: ${post.data.title}`} 
-      images={post.data.gallery && post.data.gallery.length > 0 ? post.data.gallery : undefined} 
+      title={`Xoay 360° thực tế: ${post.data.title}`} 
+      images={post.data.gallery} 
+      productLink={post.data.model3DLink || "https://shopxedap-chinh.com"}
     />
 
     {toc.length > 0 && (
-      <aside class="mb-8 p-5 bg-blue-50/60 rounded-xl border border-brand-100">
-        <h3 class="text-sm font-bold text-brand-900 mb-3 uppercase tracking-wider">📌 Mục Lục Nội Dung</h3>
+      <aside class="mb-8 p-5 bg-slate-100/70 rounded-xl border border-slate-200">
+        <h3 class="text-xs font-bold text-brand-900 mb-3 uppercase tracking-wider flex items-center gap-2">
+          <span>📌</span> Mục Lục Nội Dung
+        </h3>
         <ul class="space-y-1.5 text-sm">
           {toc.map((heading) => (
             <li class={heading.depth === 3 ? 'ml-4' : ''}>
@@ -83,7 +82,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       </aside>
     )}
 
-    <article class="prose prose-blue max-w-none prose-headings:text-brand-900 prose-a:text-brand-600">
+    <article class="prose prose-blue max-w-none text-slate-700 leading-relaxed prose-img:rounded-2xl prose-img:border prose-img:border-slate-200 prose-img:shadow-sm prose-img:mx-auto">
       <Content />
     </article>
 

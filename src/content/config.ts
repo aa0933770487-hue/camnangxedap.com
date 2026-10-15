@@ -1,4 +1,4 @@
-﻿import { defineCollection, z } from 'astro:content';
+import { defineCollection, z } from 'astro:content';
 
 const posts = defineCollection({
   type: 'content',
@@ -13,6 +13,7 @@ const posts = defineCollection({
         label: z.string(),
       })
     ).optional(),
+    model3DLink: z.string().optional(),
     category: z.enum([
       'Kinh nghiệm chọn xe',
       'Bảo dưỡng & Sửa chữa',

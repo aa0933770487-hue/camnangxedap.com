@@ -11,25 +11,28 @@ media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  # Mục 1: Quản lý bài viết cẩm nang
   - name: "posts"
-    label: "Bài Viết Cẩm Nang"
+    label: "Bài Viết & Xoay 360° Thực Tế"
     folder: "src/content/posts"
     create: true
     slug: "{{slug}}"
     editor:
       preview: true
     fields:
-      - { label: "Tiêu Đề", name: "title", widget: "string" }
+      - { label: "Tiêu Đề Bài Viết", name: "title", widget: "string" }
       - { label: "Ảnh Đại Diện (Thumbnail)", name: "image", widget: "image", required: false }
-      - label: "Bộ Ảnh Đa Góc Độ (3-4 góc chụp chi tiết)"
+      
+      # --- QUẢN LÝ CHUỖI ẢNH XOAY 360 ĐỘ THỰC TẾ TRONG ADMIN ---
+      - label: "🔄 Chuỗi Ảnh Xoay 360 Độ (Thứ tự từ góc 0 đến các góc xoay tiếp theo)"
         name: "gallery"
         widget: "list"
         required: false
         fields:
-          - { label: "Chọn Ảnh Góc Chụp", name: "src", widget: "image" }
-          - { label: "Tên Góc Chụp", name: "label", widget: "string" }
-      - { label: "Mô Tả Ngắn (SEO)", name: "description", widget: "text" }
+          - { label: "Ảnh Chụp Thực Tế Góc Xoay", name: "src", widget: "image" }
+          - { label: "Tên Góc Xoay (VD: 0° - Góc trước, 90° - Góc ngang, ...)", name: "label", widget: "string" }
+
+      - { label: "🔗 Link Mua Hàng Sản Phẩm Này", name: "model3DLink", widget: "string", default: "https://shopxedap-chinh.com", required: false }
+      - { label: "Mô Tả Ngắn (Chuẩn SEO)", name: "description", widget: "text" }
       - { label: "Ngày Đăng", name: "pubDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - label: "Chuyên Mục"
         name: "category"
@@ -40,21 +43,6 @@ collections:
           - "Phụ kiện & Đồ chơi"
           - "Cung đường & Trải nghiệm"
       - { label: "Tác Giả", name: "author", widget: "string", default: "Ban Biên Tập Cẩm Nang Xe Đạp" }
-      - { label: "Bài Nổi Bật", name: "featured", widget: "boolean", default: false }
-      - { label: "Thời Gian Đọc", name: "readTime", widget: "string", default: "5 phút" }
-      - { label: "Nội Dung", name: "body", widget: "markdown" }
-
-  # Mục 2: Sửa trực tiếp chữ Banner & Link Đối tác trên Web
-  - name: "settings"
-    label: "Cài Đặt Giao Diện & Trang Chủ"
-    files:
-      - label: "Nội Dung Banner & Khung Đối Tác"
-        name: "site_settings"
-        file: "src/content/settings/site.json"
-        fields:
-          - { label: "Tiêu Đề Lớn Banner", name: "heroTitle", widget: "string" }
-          - { label: "Mô Tả Dưới Banner", name: "heroSubtitle", widget: "text" }
-          - { label: "Tiêu Đề Khung Đối Tác", name: "partnerTitle", widget: "string" }
-          - { label: "Mô Tả Khung Đối Tác", name: "partnerDesc", widget: "text" }
-          - { label: "Link Web Cửa Hàng Đối Tác", name: "partnerLink", widget: "string" }
-          - { label: "Email Liên Hệ (Chân trang)", name: "contactEmail", widget: "string" }
+      - { label: "Đánh Dấu Bài Nổi Bật", name: "featured", widget: "boolean", default: false }
+      - { label: "Thời Gian Đọc Dự Kiến", name: "readTime", widget: "string", default: "5 phút" }
+      - { label: "Nội Dung Bài Viết", name: "body", widget: "markdown" }
