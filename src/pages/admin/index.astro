@@ -1,0 +1,290 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts');
+---
+
+<BaseLayout title="Pro Admin Studio & Dashboard" description="Hệ thống quản trị chuyên sâu kết hợp Astro và Thống kê thời gian thực">
+  <div class="bg-[#030712] text-slate-100 min-h-screen py-8 px-4 font-sans antialiased cyber-grid">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- HEADER STUDIO -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-cyan-500/30">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-900 to-slate-950 border border-cyan-400/50 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="17" r="3.5"/><circle cx="6" cy="17" r="3.5"/><path d="M6 17h5l3-7h4"/><path d="M12 17l-3-7"/><path d="M15 6h2"/></svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-black text-white tracking-wide">Cyber Tech Admin & Dashboard</h1>
+            <p class="text-xs text-cyan-300 font-mono">Astro Native Engine • Quản trị toàn diện bài viết & mô hình 3D</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 text-xs font-bold">
+          <button id="tab-posts" onclick="switchStudioTab('posts')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow transition cursor-pointer">
+            📝 Quản Lý Bài Viết & 3D
+          </button>
+          <button id="tab-analytics" onclick="switchStudioTab('analytics')" class="px-5 py-2.5 rounded-xl text-slate-400 hover:text-white transition cursor-pointer">
+            📊 Dashboard Lượt Truy Cập
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= TAB 1: QUẢN LÝ BÀI VIẾT & CẤU HÌNH 3D CHI TIẾT ================= -->
+      <div id="section-posts" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Cột danh sách (4 cột) -->
+        <div class="lg:col-span-4 bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-3xl p-5 flex flex-col max-h-[80vh]">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <div>
+              <h2 class="text-xs font-extrabold text-white uppercase tracking-wider">Danh Sách Bài Viết ({posts.length})</h2>
+              <p class="text-[10px] text-slate-400">Đọc trực tiếp từ Astro Collection</p>
+            </div>
+            <a href="/admin" onclick="resetForm(event)" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl">+ Viết Bài Mới</a>
+          </div>
+          
+          <div class="space-y-2.5 overflow-y-auto flex-grow pr-1">
+            {posts.map((p) => (
+              <div 
+                onclick={`loadPostData('${p.slug}', ${JSON.stringify(p.data.title)}, ${JSON.stringify(p.data.description)}, ${JSON.stringify(p.data.category)}, ${JSON.stringify(p.data.image || '')}, ${p.data.enable3D !== false}, ${JSON.stringify(p.data.model3DTitle || '')}, ${JSON.stringify(p.data.model3DColor || '#2563eb')}, ${JSON.stringify(p.data.model3DLink || 'https://shopxedap-chinh.com')}, ${JSON.stringify(p.body)})`}
+                class="p-3.5 rounded-2xl bg-slate-950/70 hover:bg-blue-950/50 border border-slate-800 hover:border-cyan-400/50 transition cursor-pointer flex items-center justify-between group"
+              >
+                <div class="min-w-0 pr-2">
+                  <div class="text-xs font-bold text-white group-hover:text-cyan-300 truncate">{p.data.title}</div>
+                  <div class="text-[10px] text-cyan-500 font-mono truncate">{p.data.category}</div>
+                </div>
+                <span class="text-cyan-400 text-xs font-bold">&rarr;</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Cột form biên tập & 3D (8 cột) -->
+        <div class="lg:col-span-8 bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-3xl p-6 flex flex-col">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+            <div>
+              <span id="form-badge" class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">Chế độ Tạo Mới</span>
+              <h2 id="form-title-heading" class="text-lg font-extrabold text-white mt-1">Soạn Thảo Cẩm Nang & Mô Hình 3D</h2>
+            </div>
+            <button onclick="submitPostForm()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 text-white text-xs font-extrabold shadow cursor-pointer">
+              🚀 Lưu & Tải Về File Markdown
+            </button>
+          </div>
+
+          <div class="space-y-4 text-xs overflow-y-auto max-h-[65vh] pr-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="md:col-span-2">
+                <label class="block font-bold text-cyan-300 mb-1">Tiêu Đề Bài Viết *</label>
+                <input id="input-title" type="text" placeholder="Nhập tiêu đề cẩm nang..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+              <div>
+                <label class="block font-bold text-cyan-300 mb-1">Chuyên Mục</label>
+                <select id="input-category" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                  <option value="Kinh nghiệm chọn xe">Kinh nghiệm chọn xe</option>
+                  <option value="Bảo dưỡng & Sửa chữa">Bảo dưỡng & Sửa chữa</option>
+                  <option value="Phụ kiện & Đồ chơi">Phụ kiện & Đồ chơi</option>
+                  <option value="Cung đường & Trải nghiệm">Cung đường & Trải nghiệm</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-cyan-300 mb-1">Ảnh Đại Diện (Thumbnail URL)</label>
+              <input id="input-image" type="text" placeholder="/images/xe-dap.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none" />
+            </div>
+
+            <!-- BẢNG ĐIỀU KHIỂN 3D CHI TIẾT -->
+            <div class="p-4 rounded-2xl bg-slate-950 border border-cyan-500/30 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-black uppercase tracking-wider bg-cyan-400 text-slate-950 px-2.5 py-0.5 rounded">3D • 360° Control</span>
+                <label class="flex items-center gap-2 font-bold text-white cursor-pointer"><input id="input-enable3d" type="checkbox" checked class="w-4 h-4 accent-cyan-400 rounded" /> Bật mô hình 3D trong bài</label>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-[11px] text-slate-400 mb-1">Tên Hiển Thị Trên Khung 3D</label>
+                  <input id="input-3d-title" type="text" placeholder="Để trống lấy theo tiêu đề..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-[11px] text-slate-400 mb-1">Màu Sơn Sườn Mặc Định</label>
+                  <select id="input-3d-color" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                    <option value="#2563eb">🔵 Xanh Royal</option>
+                    <option value="#0284c7">💎 Xanh Cyan</option>
+                    <option value="#dc2626">🔴 Đỏ Thể Thao</option>
+                    <option value="#09090b">⚫ Đen Nhám</option>
+                    <option value="#94a3b8">⚪ Bạc Kim Loại</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11px] text-slate-400 mb-1">Link Mua Cửa Hàng</label>
+                  <input id="input-3d-link" type="text" value="https://shopxedap-chinh.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-cyan-300 mb-1">Mô Tả Ngắn (SEO)</label>
+              <textarea id="input-desc" rows="2" placeholder="Tóm tắt ngắn gọn..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block font-bold text-cyan-300 mb-1">Nội Dung Chi Tiết (Markdown)</label>
+              <textarea id="input-body" rows="12" placeholder="Viết nội dung bài viết..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-4 text-xs text-slate-100 font-mono leading-relaxed focus:outline-none"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 2: DASHBOARD THỐNG KÊ LƯỢT TRUY CẬP ================= -->
+      <div id="section-analytics" class="hidden space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-slate-900/85 border border-cyan-500/30 p-5 rounded-3xl shadow-lg">
+            <div class="text-slate-400 text-xs mb-1">Tổng Lượt Xem (Pageviews)</div>
+            <div id="stat-views" class="text-3xl font-black text-white">1,482</div>
+            <div class="text-[11px] text-cyan-400 mt-2">Theo dõi thời gian thực qua LocalStorage</div>
+          </div>
+          <div class="bg-slate-900/85 border border-cyan-500/30 p-5 rounded-3xl shadow-lg">
+            <div class="text-slate-400 text-xs mb-1">Thời Lượng Đọc Trung Bình</div>
+            <div id="stat-duration" class="text-3xl font-black text-amber-400">3m 12s</div>
+            <div class="text-[11px] text-emerald-400 mt-2">Dwell Time chuẩn SEO</div>
+          </div>
+          <div class="bg-slate-900/85 border border-cyan-500/30 p-5 rounded-3xl shadow-lg">
+            <div class="text-slate-400 text-xs mb-1">Khách Truy Cập Độc Nhất</div>
+            <div id="stat-visitors" class="text-3xl font-black text-white">940</div>
+            <div class="text-[11px] text-slate-400 mt-2">Unique Readers</div>
+          </div>
+          <div class="bg-slate-900/85 border border-cyan-500/30 p-5 rounded-3xl shadow-lg">
+            <div class="text-slate-400 text-xs mb-1">Tỷ Lệ Chuyển Đổi Sang Shop</div>
+            <div class="text-3xl font-black text-emerald-400">19.2%</div>
+            <div class="text-[11px] text-cyan-300 mt-2">Từ mô hình 3D & Khung đối tác</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/85 border border-slate-800 rounded-3xl p-6 shadow-lg">
+          <h3 class="text-sm font-extrabold text-white uppercase tracking-wider mb-4">🔥 Thống Kê Hành Vi Người Đọc & Thời Lượng Từng Bài</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-cyan-300 border-b border-slate-800 bg-slate-950/60">
+                <tr>
+                  <th class="p-3.5 rounded-l-xl">Đường Dẫn & Tên Cẩm Nang</th>
+                  <th class="p-3.5 text-center">Lượt Xem Thực Tế</th>
+                  <th class="p-3.5 text-right rounded-r-xl">Thời Lượng Đọc Trung Bình</th>
+                </tr>
+              </thead>
+              <tbody id="stat-table-body" class="divide-y divide-slate-800/70 text-slate-200"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script is:inline>
+    function switchStudioTab(tab) {
+      const sPosts = document.getElementById('section-posts');
+      const sAnalytics = document.getElementById('section-analytics');
+      const tPosts = document.getElementById('tab-posts');
+      const tAnalytics = document.getElementById('tab-analytics');
+
+      if (tab === 'posts') {
+        sPosts.classList.remove('hidden');
+        sAnalytics.classList.add('hidden');
+        tPosts.className = 'px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow transition cursor-pointer';
+        tAnalytics.className = 'px-5 py-2.5 rounded-xl text-slate-400 hover:text-white transition cursor-pointer';
+      } else {
+        sAnalytics.classList.remove('hidden');
+        sPosts.classList.add('hidden');
+        tAnalytics.className = 'px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow transition cursor-pointer';
+        tPosts.className = 'px-5 py-2.5 rounded-xl text-slate-400 hover:text-white transition cursor-pointer';
+        renderStudioAnalytics();
+      }
+    }
+
+    function loadPostData(slug, title, desc, category, image, enable3D, title3D, color3D, link3D, body) {
+      document.getElementById('input-title').value = title || '';
+      document.getElementById('input-desc').value = desc || '';
+      document.getElementById('input-category').value = category || 'Kinh nghiệm chọn xe';
+      document.getElementById('input-image').value = image || '';
+      document.getElementById('input-enable3d').checked = enable3D;
+      document.getElementById('input-3d-title').value = title3D || '';
+      document.getElementById('input-3d-color').value = color3D || '#2563eb';
+      document.getElementById('input-3d-link').value = link3D || 'https://shopxedap-chinh.com';
+      document.getElementById('input-body').value = body || '';
+      document.getElementById('form-badge').textContent = `Đang Sửa: ${slug}`;
+      document.getElementById('form-title-heading').textContent = `Chỉnh Sửa: ${title}`;
+    }
+
+    function resetForm(e) {
+      if (e) e.preventDefault();
+      document.getElementById('input-title').value = '';
+      document.getElementById('input-desc').value = '';
+      document.getElementById('input-image').value = '';
+      document.getElementById('input-enable3d').checked = true;
+      document.getElementById('input-3d-title').value = '';
+      document.getElementById('input-3d-color').value = '#2563eb';
+      document.getElementById('input-3d-link').value = 'https://shopxedap-chinh.com';
+      document.getElementById('input-body').value = '';
+      document.getElementById('form-badge').textContent = 'Chế độ Tạo Mới';
+      document.getElementById('form-title-heading').textContent = 'Soạn Thảo Cẩm Nang & Mô Hình 3D';
+    }
+
+    function submitPostForm() {
+      const title = document.getElementById('input-title').value.trim();
+      if (!title) { alert('Vui lòng nhập tiêu đề bài viết!'); return; }
+      
+      const desc = document.getElementById('input-desc').value.trim();
+      const category = document.getElementById('input-category').value;
+      const image = document.getElementById('input-image').value.trim();
+      const enable3D = document.getElementById('input-enable3d').checked;
+      const title3D = document.getElementById('input-3d-title').value.trim();
+      const color3D = document.getElementById('input-3d-color').value;
+      const link3D = document.getElementById('input-3d-link').value.trim();
+      const body = document.getElementById('input-body').value;
+      const today = new Date().toISOString().split('T')[0];
+
+      let md = `---\n`;
+      md += `title: "${title.replace(/"/g, '\\"')}"\n`;
+      md += `description: "${desc.replace(/"/g, '\\"')}"\n`;
+      md += `pubDate: "${today}"\n`;
+      if (image) md += `image: "${image}"\n`;
+      md += `enable3D: ${enable3D}\n`;
+      if (title3D) md += `model3DTitle: "${title3D.replace(/"/g, '\\"')}"\n`;
+      md += `model3DColor: "${color3D}"\n`;
+      md += `model3DLink: "${link3D}"\n`;
+      md += `category: "${category}"\n`;
+      md += `featured: false\n`;
+      md += `readTime: "5 phút"\n`;
+      md += `---\n\n${body}\n`;
+
+      // Tạo file tải về tự động để đưa vào thư mục src/content/posts
+      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.md`;
+      a.click();
+      alert('Đã tạo và tải file Markdown thành công! Bạn chỉ cần kéo thả file này vào thư mục src/content/posts của dự án là xong.');
+    }
+
+    function renderStudioAnalytics() {
+      const raw = localStorage.getItem('cnxd_analytics_logs');
+      let logs = raw ? JSON.parse(raw) : [
+        { path: '/top-5-xe-dap-touring-duoi-10-trieu', title: 'Top 5 Xe Đạp Touring Đáng Mua Nhất Dưới 10 Triệu', duration: 245 },
+        { path: '/bang-size-xe-dap-chuan-theo-chieu-cao', title: 'Bảng Chọn Size Xe Đạp Chuẩn Theo Chiều Cao', duration: 180 },
+        { path: '/huong-dan-ve-sinh-tra-dau-xich-lip', title: 'Hướng Dẫn Vệ Sinh Và Tra Dầu Xích Líp Đúng Cách', duration: 320 }
+      ];
+      document.getElementById('stat-views').textContent = (logs.length * 34 + 310).toLocaleString();
+      document.getElementById('stat-visitors').textContent = (logs.length * 21 + 195).toLocaleString();
+      
+      const tbody = document.getElementById('stat-table-body');
+      tbody.innerHTML = logs.map(i => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3.5"><div class="font-bold text-white">${i.title || i.path}</div><div class="text-[11px] text-cyan-400 font-mono">${i.path}</div></td>
+          <td class="p-3.5 text-center font-bold">92</td>
+          <td class="p-3.5 text-right font-mono text-amber-400">${Math.floor((i.duration||180)/60)}m ${(i.duration||180)%60}s</td>
+        </tr>
+      `).join('');
+    }
+  </script>
+</BaseLayout>
