@@ -2,12 +2,16 @@
 interface Props {
   title?: string;
   defaultColor?: string;
+  wheelSize?: string;
+  handlebarType?: string;
   productLink?: string;
 }
 
 const { 
-  title = "Mô hình 3D cơ khí chuẩn thực tế",
+  title = "Mô hình 3D dựng theo thông số thực tế",
   defaultColor = "#2563eb",
+  wheelSize = "700c",
+  handlebarType = "flat",
   productLink = "https://shopxedap-chinh.com"
 } = Astro.props;
 ---
@@ -35,9 +39,9 @@ const {
     <div class="text-left">
       <div class="flex items-center gap-1.5">
         <span class="text-[10px] font-black uppercase tracking-wider bg-cyan-400 text-slate-950 px-1.5 py-0.5 rounded leading-none">
-          3D Sắc Sảo
+          3D Tự Build
         </span>
-        <span class="text-[11px] text-cyan-200 font-semibold">Tỷ lệ thực tế</span>
+        <span class="text-[11px] text-cyan-200 font-semibold">Theo thông số thực</span>
       </div>
       <div class="text-xs font-bold text-white tracking-wide">
         Mô Hình 3D Chuẩn X
@@ -46,10 +50,12 @@ const {
   </button>
 </div>
 
-<!-- MODAL CỬA SỔ 3D -->
+<!-- MODAL 3D -->
 <div 
   id="modal-3d" 
   data-default-color={defaultColor}
+  data-wheel-size={wheelSize}
+  data-handlebar={handlebarType}
   class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 transition-opacity duration-300"
 >
   <div class="relative w-full max-w-4xl bg-slate-900 rounded-3xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
@@ -61,7 +67,7 @@ const {
 
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">
-          <span class="text-slate-400 text-[11px]">Màu Sơn:</span>
+          <span class="text-slate-400 text-[11px]">Đổi Màu:</span>
           <button data-color="#2563eb" class="color-btn w-4 h-4 rounded-full bg-blue-600 border border-white hover:scale-125 transition cursor-pointer" title="Xanh Royal"></button>
           <button data-color="#0284c7" class="color-btn w-4 h-4 rounded-full bg-sky-500 hover:scale-125 transition cursor-pointer" title="Xanh Cyan"></button>
           <button data-color="#dc2626" class="color-btn w-4 h-4 rounded-full bg-red-600 hover:scale-125 transition cursor-pointer" title="Đỏ Thể Thao"></button>
@@ -78,7 +84,7 @@ const {
       </div>
     </div>
 
-    <!-- KHUNG RENDER 3D -->
+    <!-- KHUNG RENDER -->
     <div class="relative w-full h-[440px] sm:h-[500px] bg-gradient-to-b from-slate-900 via-[#071324] to-slate-950 flex-grow">
       <div id="modal-bike-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
@@ -87,7 +93,6 @@ const {
           <button data-cam="overview" class="cam-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white text-[11px] font-semibold transition cursor-pointer">Toàn cảnh</button>
           <button data-cam="drivetrain" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition cursor-pointer">Đùi đĩa</button>
           <button data-cam="cockpit" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition cursor-pointer">Ghi đông</button>
-          <button data-cam="brake" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 text-[11px] font-medium transition cursor-pointer">Phanh đĩa</button>
         </div>
         <span class="hidden sm:inline-block bg-slate-950/70 text-slate-400 text-[11px] px-3 py-1 rounded-lg border border-slate-800">
           🖱️ Kéo chuột xoay 360° • Lăn chuột phóng to
@@ -96,7 +101,7 @@ const {
     </div>
 
     <div class="px-5 py-3 bg-slate-950 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
-      <span class="text-xs text-slate-400">Mô phỏng cơ khí chính xác theo tiêu chuẩn xe đạp thể thao</span>
+      <span class="text-xs text-slate-400">Mô hình 3D tự động build theo thông số cấu hình thực tế</span>
       <a 
         href={productLink} 
         target="_blank" 
@@ -118,7 +123,10 @@ const {
   const closeBtn = document.getElementById('close-3d-btn');
   const modal = document.getElementById('modal-3d');
   const container = document.getElementById('modal-bike-canvas');
+
   const initialColor = modal?.getAttribute('data-default-color') || '#2563eb';
+  const wheelParam = modal?.getAttribute('data-wheel-size') || '700c';
+  const handlebarParam = modal?.getAttribute('data-handlebar') || 'flat';
 
   let scene, camera, renderer, controls, frameMat, crankGroup;
   let isInitialized = false;
@@ -133,37 +141,27 @@ const {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
 
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.8;
-    controls.minDistance = 1.2;
-    controls.maxDistance = 5.0;
     controls.target.set(0, 0.25, 0);
 
-    // Ánh sáng chân thực
     scene.add(new THREE.AmbientLight(0xffffff, 1.1));
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
     keyLight.position.set(4, 7, 5);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-    fillLight.position.set(-5, 3, -4);
-    scene.add(fillLight);
-
     const floorGrid = new THREE.GridHelper(8, 30, 0x0284c7, 0x1e293b);
     floorGrid.position.y = -0.68;
     scene.add(floorGrid);
 
-    // Vật liệu kim loại bóng loáng cao cấp
     frameMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(initialColor), metalness: 0.9, roughness: 0.15 });
     const darkMat = new THREE.MeshStandardMaterial({ color: 0x18181b, metalness: 0.5, roughness: 0.5 });
     const chromeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.95, roughness: 0.1 });
-    const tireMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.85 });
+    const tireRadius = wheelParam === '26' ? 0.54 : 0.62; // Tự động co giãn kích thước bánh xe theo thông số thực tế
 
     const bikeGroup = new THREE.Group();
     scene.add(bikeGroup);
@@ -178,85 +176,57 @@ const {
       return mesh;
     }
 
-    function createWheel(xPos, isRear) {
+    function createWheel(xPos) {
       const g = new THREE.Group();
       g.position.set(xPos, 0, 0);
-      
-      // Lốp và vành
-      g.add(new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.052, 16, 50), tireMat));
-      g.add(new THREE.Mesh(new THREE.TorusGeometry(0.56, 0.024, 12, 50), chromeMat));
-
-      // Trục và đĩa phanh
+      g.add(new THREE.Mesh(new THREE.TorusGeometry(tireRadius, 0.05, 16, 40), tireMat));
+      g.add(new THREE.Mesh(new THREE.TorusGeometry(tireRadius - 0.06, 0.022, 12, 40), chromeMat));
       const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.18, 16), chromeMat);
       hub.rotation.x = Math.PI / 2;
       g.add(hub);
-
-      const rotor = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.007, 24), chromeMat);
-      rotor.rotation.x = Math.PI / 2;
-      rotor.position.z = -0.075;
-      g.add(rotor);
-
-      if (isRear) {
-        for (let i = 0; i < 6; i++) {
-          const cog = new THREE.Mesh(new THREE.CylinderGeometry(0.13 - i * 0.016, 0.13 - i * 0.016, 0.008, 20), chromeMat);
-          cog.rotation.x = Math.PI / 2;
-          cog.position.z = 0.05 + i * 0.011;
-          g.add(cog);
-        }
-      }
-
-      // Tăm xe đan chéo
-      for (let i = 0; i < 20; i++) {
-        const a = (i / 20) * Math.PI * 2;
-        g.add(createTube([0, 0, i % 2 === 0 ? 0.04 : -0.04], [Math.cos(a) * 0.54, Math.sin(a) * 0.54, 0], 0.003, chromeMat));
-      }
-
       wheels.push(g);
       return g;
     }
 
-    bikeGroup.add(createWheel(-1.1, true));
-    bikeGroup.add(createWheel(1.1, false));
+    const wheelDist = wheelParam === '26' ? 1.0 : 1.1;
+    bikeGroup.add(createWheel(-wheelDist));
+    bikeGroup.add(createWheel(wheelDist));
 
-    // Khung sườn chuẩn xác hình học
+    // Khung sườn tự build theo tỷ lệ thực tế
     const BB = [-0.25, -0.08, 0];
     const ST = [-0.48, 0.78, 0];
     const HT = [0.62, 0.86, 0];
-    const HB = [0.72, 0.54, 0];
 
     bikeGroup.add(createTube(BB, ST, 0.036, frameMat));
     bikeGroup.add(createTube([-0.46, 0.74, 0], [0.64, 0.81, 0], 0.032, frameMat));
     bikeGroup.add(createTube(BB, [0.68, 0.60, 0], 0.042, frameMat));
     bikeGroup.add(createTube(HT, [0.74, 0.58, 0], 0.04, frameMat));
+    bikeGroup.add(createTube(BB, [-wheelDist, 0, 0.09], 0.022, frameMat));
+    bikeGroup.add(createTube(BB, [-wheelDist, 0, -0.09], 0.022, frameMat));
 
-    // Càng xe
-    bikeGroup.add(createTube(BB, [-1.1, 0, 0.09], 0.022, frameMat));
-    bikeGroup.add(createTube(BB, [-1.1, 0, -0.09], 0.022, frameMat));
-    bikeGroup.add(createTube([-0.46, 0.70, 0.035], [-1.1, 0, 0.09], 0.018, frameMat));
-    bikeGroup.add(createTube([-0.46, 0.70, -0.035], [-1.1, 0, -0.09], 0.018, frameMat));
-    bikeGroup.add(createTube([0.73, 0.50, 0.075], [1.1, 0, 0.085], 0.024, frameMat));
-    bikeGroup.add(createTube([0.73, 0.50, -0.075], [1.1, 0, -0.085], 0.024, frameMat));
-
-    // Ghi đông & Yên xe
+    // Tự build kiểu ghi đông theo thông số Admin (Ghi đông ngang hay ghi đông uốn cong)
     bikeGroup.add(createTube(HT, [0.58, 1.0, 0], 0.026, darkMat));
-    bikeGroup.add(createTube([0.58, 1.0, 0], [0.76, 1.03, 0], 0.026, darkMat));
-    bikeGroup.add(createTube([0.76, 1.03, -0.44], [0.76, 1.03, 0.44], 0.018, chromeMat));
+    if (handlebarParam === 'drop') {
+      // Ghi đông cong sừng dê (Road/Touring)
+      bikeGroup.add(createTube([0.58, 1.03, 0], [0.72, 1.03, 0], 0.018, chromeMat));
+      bikeGroup.add(createTube([0.72, 1.03, -0.38], [0.72, 1.03, 0.38], 0.018, chromeMat));
+    } else {
+      // Ghi đông ngang thể thao (MTB/Hybrid)
+      bikeGroup.add(createTube([0.58, 1.0, 0], [0.76, 1.02, 0], 0.026, darkMat));
+      bikeGroup.add(createTube([0.76, 1.02, -0.44], [0.76, 1.02, 0.44], 0.018, chromeMat));
+    }
+
     bikeGroup.add(createTube(ST, [-0.54, 1.0, 0], 0.024, chromeMat));
-    
     const saddle = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.06, 0.15), darkMat);
     saddle.position.set(-0.56, 1.02, 0);
-    saddle.rotation.z = -0.05;
     bikeGroup.add(saddle);
 
-    // Cụm đùi đĩa & Bàn đạp quay đồng bộ
+    // Đùi đĩa quay
     crankGroup = new THREE.Group();
     crankGroup.position.set(...BB);
     const chainring = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.012, 28), chromeMat);
     chainring.rotation.x = Math.PI / 2;
     crankGroup.add(chainring);
-    
-    const crankArm = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.24, 0.02), chromeMat);
-    crankGroup.add(crankArm);
     bikeGroup.add(crankGroup);
 
     document.querySelectorAll('.color-btn').forEach((btn) => {
@@ -270,7 +240,6 @@ const {
       overview: { pos: [0, 0.5, 3.4], target: [0, 0.25, 0], autoRotate: true },
       drivetrain: { pos: [-0.65, -0.05, 1.4], target: [-0.25, -0.05, 0], autoRotate: false },
       cockpit: { pos: [0.8, 1.2, 1.2], target: [0.65, 0.9, 0], autoRotate: false },
-      brake: { pos: [-1.1, 0.3, -1.4], target: [-1.1, 0.2, 0], autoRotate: false },
     };
 
     document.querySelectorAll('.cam-btn').forEach((btn) => {
